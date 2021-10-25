@@ -1,8 +1,39 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io' show Platform;
+
+class Global {
+  static var binPath = '';
+}
 
 void main() {
+  // init
+  _setBinPath();
+
+  // run
   runApp(const SlingApp());
+}
+
+void _setBinPath() async {
+  // construct binary
+  var binName = 'sling-mac';
+  if (Platform.isLinux) {
+    binName = 'sling-linux';
+  } else if (Platform.isWindows) {
+    binName = 'sling-win.exe';
+  }
+  // https://stackoverflow.com/questions/52353764/how-do-i-get-the-assets-file-path-in-flutter/53817467
+  var directory = await getApplicationSupportDirectory();
+  Global.binPath = join(directory.path, binName);
+  var bin = await rootBundle.load('bin/' + binName);
+  List<int> bytes =
+      bin.buffer.asUint8List(bin.offsetInBytes, bin.lengthInBytes);
+  await File(Global.binPath).writeAsBytes(bytes);
+  print(Global.binPath);
 }
 
 class SlingApp extends StatelessWidget {
@@ -37,15 +68,6 @@ class HomePage extends StatefulWidget {
   static const routeName = '/home';
   const HomePage({Key? key, required this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -77,10 +99,26 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    void testSling() async {
-      var result = await Process.start('ls', ['-l']);
-      print(result.stdout);
+    void testSlingAsync() async {
+      var result = await Process.start(Global.binPath, ['--version']);
+      var stdout = await result.stdout
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .join();
+      var stderr = await result.stderr
+          .transform(utf8.decoder)
+          .transform(const LineSplitter())
+          .join();
+      print(stdout);
+      print(stderr);
     }
+
+    void testSling() {
+      var result = Process.runSync(Global.binPath, ['--version']);
+      print(result.stdout);
+      print(result.stderr);
+    }
+
     return Scaffold(
       // appBar: AppBar(
       //   // Here we take the value from the MyHomePage object that was created by
@@ -176,10 +214,8 @@ class _HomePageState extends State<HomePage> {
             ),
             TextButton(
               child: const Text('test sling'),
-              onPressed:  () => {
-                testSling()
-              }, 
-              ),
+              onPressed: () => {testSling()},
+            ),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
