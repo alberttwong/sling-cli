@@ -16,6 +16,40 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+ClipRRect MakeBlueButton(
+    BuildContext context, String text, Function()? onPressed) {
+  var button = ClipRRect(
+    borderRadius: BorderRadius.circular(4),
+    child: Stack(
+      children: <Widget>[
+        Positioned.fill(
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: <Color>[
+                  Color(0xFF0D47A1),
+                  Color(0xFF1976D2),
+                  Color(0xFF42A5F5),
+                ],
+              ),
+            ),
+          ),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.all(16.0),
+            primary: Colors.white,
+            textStyle: const TextStyle(fontSize: 20),
+          ),
+          onPressed: onPressed,
+          child: Text(text),
+        ),
+      ],
+    ),
+  );
+  return button;
+}
+
 class _HomePageState extends State<HomePage> {
   int _counter = 0;
 
@@ -48,8 +82,20 @@ class _HomePageState extends State<HomePage> {
 
     void testSling() {
       var result = Process.runSync(Global.binPath, ['--version']);
-      print(result.stdout);
-      print(result.stderr);
+      var version = result.stdout;
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text('Success'),
+          content: Text(version),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
 
     return Scaffold(
@@ -64,66 +110,18 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Stack(
-                children: <Widget>[
-                  Positioned.fill(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: <Color>[
-                            Color(0xFF0D47A1),
-                            Color(0xFF1976D2),
-                            Color(0xFF42A5F5),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.all(16.0),
-                      primary: Colors.white,
-                      textStyle: const TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        TaskNewType.routeName,
-                        arguments: Task('12341258536.cha'),
-                      );
-                    },
-                    child: const Text('New Task'),
-                  ),
-                ],
-              ),
-            ),
+            MakeBlueButton(context, 'New Task', () {
+              Navigator.pushNamed(
+                context,
+                TaskNewType.routeName,
+                arguments: Task('12341258536.cha'),
+              );
+            }),
             const SizedBox(height: 15),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Stack(
-                children: <Widget>[
-                  Positioned.fill(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: <Color>[
-                            Color(0xFF0D47A1),
-                            Color(0xFF1976D2),
-                            Color(0xFF42A5F5),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.all(16.0),
-                      primary: Colors.white,
-                      textStyle: const TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () => showDialog<String>(
+            MakeBlueButton(
+                context,
+                'Re-Run Task',
+                () => showDialog<String>(
                       context: context,
                       builder: (BuildContext context) => AlertDialog(
                         title: const Text('AlertDialog Title'),
@@ -139,12 +137,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-                    ),
-                    child: const Text('Re-Run Task'),
-                  ),
-                ],
-              ),
-            ),
+                    )),
             TextButton(
               child: const Text('test sling'),
               onPressed: () => {testSling()},

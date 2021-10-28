@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:window_size/window_size.dart';
 import 'dart:io' show Platform;
 
 import 'pages/task/new/confirm_page.dart';
@@ -18,6 +19,7 @@ import 'pages/home.dart';
 
 void main() {
   // init
+  _setWindow();
   _setBinPath();
 
   // run
@@ -40,6 +42,18 @@ void _setBinPath() async {
       bin.buffer.asUint8List(bin.offsetInBytes, bin.lengthInBytes);
   await File(Global.binPath).writeAsBytes(bytes);
   print(Global.binPath);
+}
+
+void _setWindow() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  setWindowTitle('Sling');
+  // setWindowFrame();
+  setWindowMinSize(const Size(700, 500));
+  setWindowMaxSize(const Size(700, 1000));
+  var screens = await getScreenList();
+  for (final screen in screens) {
+    print('${screen.visibleFrame.width}x${screen.visibleFrame.height}');
+  }
 }
 
 class SlingApp extends StatelessWidget {
