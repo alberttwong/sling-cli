@@ -9,6 +9,7 @@ class TaskNewConnectionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final task = ModalRoute.of(context)!.settings.arguments as Task;
+    // get connections
     return Scaffold(
         body: ListView(
       children: <Widget>[

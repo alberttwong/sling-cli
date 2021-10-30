@@ -9,6 +9,7 @@ import 'package:sling/core/task.dart';
 import 'package:sling/pages/task/new/type_page.dart';
 
 import 'package:expandable/expandable.dart';
+import 'package:sling/helpers/helpers.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/home';
@@ -18,40 +19,6 @@ class HomePage extends StatefulWidget {
 
   @override
   State<HomePage> createState() => _HomePageState();
-}
-
-ClipRRect makeBlueButton(
-    BuildContext context, String text, Function()? onPressed) {
-  var button = ClipRRect(
-    borderRadius: BorderRadius.circular(4),
-    child: Stack(
-      children: <Widget>[
-        Positioned.fill(
-          child: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: <Color>[
-                  Color(0xFF0D47A1),
-                  Color(0xFF1976D2),
-                  Color(0xFF42A5F5),
-                ],
-              ),
-            ),
-          ),
-        ),
-        TextButton(
-          style: TextButton.styleFrom(
-            padding: const EdgeInsets.all(16.0),
-            primary: Colors.white,
-            textStyle: const TextStyle(fontSize: 20),
-          ),
-          onPressed: onPressed,
-          child: Text(text),
-        ),
-      ],
-    ),
-  );
-  return button;
 }
 
 class _HomePageState extends State<HomePage> {
@@ -70,6 +37,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // get all tasks
+
+    // if none, there put banner to create a new one
+
+    // else show task groups
     return Scaffold(
       // appBar: AppBar(
       //   // Here we take the value from the MyHomePage object that was created by
@@ -157,7 +129,7 @@ Center body1(BuildContext context, int _counter) {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        makeBlueButton(context, 'New Task', () {
+        makeBlueButton(context, 'New Task', onPressed: () {
           Navigator.pushNamed(
             context,
             TaskNewType.routeName,
@@ -165,10 +137,8 @@ Center body1(BuildContext context, int _counter) {
           );
         }),
         const SizedBox(height: 15),
-        makeBlueButton(
-            context,
-            'Re-Run Task',
-            () => showDialog<String>(
+        makeBlueButton(context, 'Re-Run Task',
+            onPressed: () => showDialog<String>(
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
                     title: const Text('AlertDialog Title'),

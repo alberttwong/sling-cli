@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sling/core/task.dart';
 import 'package:sling/pages/task/new/connections_page.dart';
+import 'package:sling/helpers/helpers.dart';
 
 class TaskNewType extends StatelessWidget {
   static const routeName = '/task/new/type';
@@ -15,116 +16,35 @@ class TaskNewType extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: Stack(
-              children: <Widget>[
-                Positioned.fill(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: <Color>[
-                          Color(0xFF0D47A1),
-                          Color(0xFF1976D2),
-                          Color(0xFF42A5F5),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.all(16.0),
-                    primary: Colors.white,
-                    textStyle: const TextStyle(fontSize: 20),
-                  ),
-                  onPressed: () {
-                    task.type = 'file-db';
-                    Navigator.pushNamed(
-                      context,
-                      TaskNewConnectionsPage.routeName,
-                      arguments: task,
-                    );
-                  },
-                  child: const Text('File To Database'),
-                ),
-              ],
-            ),
-          ),
+          makeBlueButton(context, 'File To Database', fontSize: 30,
+              onPressed: () {
+            task.type = 'file-db';
+            Navigator.pushNamed(
+              context,
+              TaskNewConnectionsPage.routeName,
+              arguments: task,
+            );
+          }),
           const SizedBox(height: 15),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: Stack(
-              children: <Widget>[
-                Positioned.fill(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: <Color>[
-                          Color(0xFF0D47A1),
-                          Color(0xFF1976D2),
-                          Color(0xFF42A5F5),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.all(16.0),
-                    primary: Colors.white,
-                    textStyle: const TextStyle(fontSize: 20),
-                  ),
-                  onPressed: () {
-                    task.type = 'db-db';
-                    Navigator.pushNamed(
-                      context,
-                      TaskNewConnectionsPage.routeName,
-                      arguments: task,
-                    );
-                  },
-                  child: const Text('Database To Database'),
-                ),
-              ],
-            ),
-          ),
+          makeBlueButton(context, 'Database To Database', fontSize: 30,
+              onPressed: () {
+            task.type = 'db-db';
+            Navigator.pushNamed(
+              context,
+              TaskNewConnectionsPage.routeName,
+              arguments: task,
+            );
+          }),
           const SizedBox(height: 15),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: Stack(
-              children: <Widget>[
-                Positioned.fill(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: <Color>[
-                          Color(0xFF0D47A1),
-                          Color(0xFF1976D2),
-                          Color(0xFF42A5F5),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.all(16.0),
-                    primary: Colors.white,
-                    textStyle: const TextStyle(fontSize: 20),
-                  ),
-                  onPressed: () {
-                    task.type = 'db-file';
-                    Navigator.pushNamed(
-                      context,
-                      TaskNewConnectionsPage.routeName,
-                      arguments: task,
-                    );
-                  },
-                  child: const Text('Database To File'),
-                ),
-              ],
-            ),
-          ),
+          makeBlueButton(context, 'Database To File', fontSize: 30,
+              onPressed: () {
+            task.type = 'db-file';
+            Navigator.pushNamed(
+              context,
+              TaskNewConnectionsPage.routeName,
+              arguments: task,
+            );
+          }),
         ],
       ),
     );
