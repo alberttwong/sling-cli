@@ -8,7 +8,7 @@ const Map<String, String> defHeaders = {
 };
 
 /*
-connections: GET, POST, PUT
+connections: GET, POST, PUT, CONNECT
 tasks: GET, POST, PUT (source_conn, target_conn)
 execute: POST (task_id)
 history: GET (task_id)

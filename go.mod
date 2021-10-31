@@ -10,11 +10,13 @@ require (
 	github.com/flarco/g v0.0.7
 	github.com/getsentry/sentry-go v0.11.0
 	github.com/go-openapi/strfmt v0.19.6 // indirect
+	github.com/gorilla/websocket v1.4.2
 	github.com/integrii/flaggy v1.4.4
 	github.com/jedib0t/go-pretty v4.3.0+incompatible
 	github.com/jmespath/go-jmespath v0.4.0
 	github.com/json-iterator/go v1.1.11 // indirect
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
+	github.com/labstack/echo/v4 v4.6.1
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/rs/zerolog v1.20.0
 	github.com/rudderlabs/analytics-go v3.3.1+incompatible

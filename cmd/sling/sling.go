@@ -99,6 +99,24 @@ var cliInteractive = &g.CliSC{
 	ExecProcess: slingPrompt,
 }
 
+var cliServer = &g.CliSC{
+	Name:        "server",
+	Description: "launch REST API server mode",
+	ExecProcess: slingServer,
+	Flags: []g.Flag{
+		{
+			Name:        "host",
+			Type:        "string",
+			Description: "The host to bind to. Default is `localhost`",
+		},
+		{
+			Name:        "port",
+			Type:        "string",
+			Description: "The port to bind to. Default is `9876`",
+		},
+	},
+}
+
 var cliUpdate = &g.CliSC{
 	Name:        "update",
 	Description: "update to the latest version",
@@ -149,6 +167,7 @@ func init() {
 	cliInteractive.Make().Add()
 	cliConns.Make().Add()
 	cliRun.Make().Add()
+	cliServer.Make().Add()
 	cliUpdate.Make().Add()
 
 	sentry.Init(sentry.ClientOptions{

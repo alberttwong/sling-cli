@@ -8,6 +8,7 @@ import (
 	"github.com/c-bata/go-prompt"
 	"github.com/flarco/g"
 	"github.com/flarco/sling/core"
+	"github.com/flarco/sling/core/env"
 	"github.com/spf13/cast"
 )
 
@@ -51,7 +52,7 @@ func completer(in prompt.Document) []prompt.Suggest {
 		// suggestions based on previous word
 		switch {
 		case g.In(prevWord, "src-conn", "tgt-conn"):
-			for _, conn := range getLocalConns() {
+			for _, conn := range env.GetLocalConns() {
 				localSuggestions = append(localSuggestions, prompt.Suggest{Text: conn.Name, Description: conn.Description})
 			}
 			return prompt.FilterHasPrefix(localSuggestions, w, true)
@@ -103,7 +104,7 @@ func executor(in string) {
 
 func slingPrompt(c *g.CliSC) (err error) {
 	fmt.Println("sling - An Extract-Load tool")
-	fmt.Println("Slings data from a data source to a data target.\nVersion " + core.Version)
+	fmt.Println("Slings from a data source to a data target.\nVersion " + core.Version)
 
 	p := prompt.New(
 		executor,
