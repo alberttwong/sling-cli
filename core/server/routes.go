@@ -2,9 +2,9 @@ package server
 
 import (
 	"net/http"
-	"os"
 	"strings"
 
+	"github.com/flarco/dbio/connection"
 	"github.com/flarco/dbio/iop"
 	"github.com/flarco/g"
 	"github.com/flarco/sling/core/env"
@@ -33,6 +33,7 @@ func (r RouteName) String() string {
 func addRoutes(e *echo.Echo) {
 	e.GET(RouteConnections.String(), GetConnections)
 	e.POST(RouteConnections.String(), PostConnections)
+	e.DELETE(RouteConnections.String(), DeleteConnections)
 
 	e.GET(RouteTasks.String(), GetTasks)
 	e.POST(RouteTasks.String(), PostTasks)
@@ -62,7 +63,7 @@ type Response struct {
 }
 
 func LoadConnection(connID string) (conn env.Conn, err error) {
-	os.Setenv("DBIO_USE_POOL", "TRUE")
+	// os.Setenv("DBIO_USE_POOL", "TRUE")
 	localConns := env.GetLocalConns()
 	for _, localConn := range localConns {
 		if strings.EqualFold(connID, localConn.Name) {
@@ -108,7 +109,29 @@ func GetConnections(c echo.Context) (err error) {
 
 }
 
+// PostConnections adds a connection to local profile
 func PostConnections(c echo.Context) (err error) {
+	req := map[string]interface{}{}
+	if err = c.Bind(&req); err != nil {
+		return g.ErrJSON(http.StatusBadRequest, err, "invalid set connection request")
+	}
+
+	// create connection to test
+	conn, err := connection.NewConnectionFromMap(req)
+	if err != nil {
+		return g.ErrJSON(http.StatusBadRequest, err, "unable to create connection")
+	}
+
+	if err = TestConnection(conn, "", 15); err != nil {
+		return g.ErrJSON(http.StatusBadRequest, err, "error testing connectivity for %s", conn.Name)
+	}
+
+	// save to profile
+
+	return c.JSON(http.StatusOK, Response{Data: g.M()})
+}
+
+func DeleteConnections(c echo.Context) (err error) {
 	return c.JSON(http.StatusOK, Response{Data: g.M()})
 }
 

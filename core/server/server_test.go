@@ -21,7 +21,7 @@ func TestAll(t *testing.T) {
 	go srv.Start()
 	time.Sleep(1 * time.Second)
 	assert.NoError(t, nil)
-	// testConnection(t)
+	testConnection(t)
 	testSchemata(t)
 }
 
@@ -88,6 +88,16 @@ func testConnection(t *testing.T) {
 	conns := cast.ToSlice(extractData(data)["conns"])
 	assert.Greater(t, len(conns), 1)
 
+	// test connectivity
+	m = g.M(
+		"conn_id", "PG_BIONIC_URL",
+		"test", "true",
+	)
+	data, err = getRequest(server.RouteConnections, m)
+	if !g.AssertNoError(t, err) {
+		return
+	}
+
 	// create connection
 	// update connection
 	// delete connection
@@ -99,12 +109,12 @@ func testSchemata(t *testing.T) {
 		"level", "database",
 	)
 
-	// get connections
+	// get schemata
 	respData, err := getRequest(server.RouteSchemata, m)
 	if !g.AssertNoError(t, err) {
 		return
 	}
-	data := extractData(respData)
-	g.PP(data)
+	rows := cast.ToSlice(extractData(respData)["rows"])
+	assert.Greater(t, len(rows), 0)
 
 }
